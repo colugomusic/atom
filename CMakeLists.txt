@@ -15,7 +15,7 @@ target_sources(atom INTERFACE
 )
 
 if (BUILD_TESTING)
-	add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/test)
+	add_subdirectory(test)
 endif()
 
 include(CMakePackageConfigHelpers)
