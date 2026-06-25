@@ -47,7 +47,7 @@ Please go and watch these videos. I promise they are interesting!
 
 - [CppCon 2017: Juan Pedro Bolivar Puente “Postmodern immutable data structures”](https://www.youtube.com/watch?v=sPhpelUfu8Q)
 - [CppCon 2018: Juan Pedro Bolivar Puente “The Most Valuable Values”](https://www.youtube.com/watch?v=_oBx_NbLghY)
-- [Juan Pedro Bolívar Puente — Squaring the circle: value oriented design in an object oriented system](https://www.youtube.com/watch?v=e2-FRFEx8CA)
+- [Value-oriented design in an object-oriented system - Juan Pedro Bolivar Puente](https://www.youtube.com/watch?v=SAMR5GJ_GqA)
 
 You are now up to date!
 
