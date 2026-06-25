@@ -39,7 +39,7 @@ template <typename T> using node_list = std::vector<const node<T>*>;
 template <typename T>
 auto init_protected_node_list_for_gc() -> node_list<T> {
 	auto list = node_list<T>{};
-	list.reserve(std::thread::hardware_concurrency() * 2);
+	list.reserve(std::max(1u, std::thread::hardware_concurrency()) * 2);
 	return list;
 }
 
@@ -231,7 +231,7 @@ auto release() -> void {
 
 [[nodiscard]] auto fn_always(auto value) { return [value](auto&&...) { return value; }; }
 
-template <typename T> hazptrs<T>::hazptrs() : slot_list{init_slot_list<T>(std::thread::hardware_concurrency())} {}
+template <typename T> hazptrs<T>::hazptrs() : slot_list{init_slot_list<T>(std::max(1u, std::thread::hardware_concurrency()))} {}
 template <typename T> thread_slot<T>::thread_slot(hazptr::hazptrs<T>* hazptrs) : slot_{acquire_thread_slot(hazptrs)} {}
 template <typename T> thread_slot<T>::~thread_slot() { release_thread_slot(slot_); }
 template <typename T> slot<T>::~slot() { delete_unprotected_nodes(&retire_list, fn_always(false)); }
