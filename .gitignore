@@ -1,0 +1,5 @@
+.clangd
+CMakeUserPresets.json
+neovim.json
+toolchain-macos.cmake
+toolchain-windows-cl.cmake

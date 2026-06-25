@@ -1,0 +1,29 @@
+{
+	"version": 8,
+	"configurePresets": [
+		{
+			"name": "cfg-base",
+			"hidden": true,
+			"cacheVariables": {
+				"CMAKE_EXPORT_COMPILE_COMMANDS"   : "ON",
+				"CMAKE_POSITION_INDEPENDENT_CODE" : "ON",
+				"CMAKE_CXX_STANDARD_REQUIRED"     : "ON",
+				"CMAKE_CXX_STANDARD"              : "23"
+			}
+		},
+		{
+			"name": "cfg-ninja",
+			"displayName": "Ninja",
+			"hidden": true,
+			"inherits": "cfg-base",
+			"generator": "Ninja"
+		},
+		{
+			"name": "cfg-windows-vs2026",
+			"displayName": "Windows: Visual Studio 2026",
+			"hidden": true,
+			"inherits": "cfg-base",
+			"generator": "Visual Studio 18 2026"
+		}
+	]
+}
