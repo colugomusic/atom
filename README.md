@@ -1,4 +1,4 @@
-# atom::val<T>
+# `atom::val<T>`
 
 This is an experimental header-only C++ lock-free thread synchronization primitive inspired by Clojure Atoms.
 
