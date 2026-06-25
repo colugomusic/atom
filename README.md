@@ -63,37 +63,32 @@ auto print_counter_value(const model& v) -> void {
 }
 
 auto printer_thread(std::stop_token stop) -> void {
-	for (;;) {
-		if (stop.stop_requested()) { break; }
+	while (!stop.stop_requested()) {
 		print_counter_value(g_model.get());
 	}
 }
 
 auto decrementer_thread(std::stop_token stop) -> void {
-	for (;;) {
-		if (stop.stop_requested()) { break; }
+	while (!stop.stop_requested()) {
 		g_model.apply(fn_decrement_counter);
 	}
 }
 
 auto incrementer_thread(std::stop_token stop) -> void {
-	for (;;) {
-		if (stop.stop_requested()) { break; }
+	while (!stop.stop_requested()) {
 		g_model.apply(fn_increment_counter);
 	}
 }
 
 auto return_42_thread(std::stop_token stop) -> void {
-	for (;;) {
-		if (stop.stop_requested()) { break; }
+	while (!stop.stop_requested()) {
 		const auto value = g_model.apply_r(fn_just_return_42);
 		assert (value == 42);
 	}
 }
 
 auto setter_thread(std::stop_token stop) -> void {
-	for (;;) {
-		if (stop.stop_requested()) { break; }
+	while (!stop.stop_requested()) {
 		g_model.apply(fn_set_counter(0));
 	}
 }
