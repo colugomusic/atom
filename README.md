@@ -46,8 +46,8 @@ This means that `fn` may be called multiple times, so it should be pure.
 Please go and watch these videos. I promise they are interesting!
 
 - [CppCon 2017: Juan Pedro Bolivar Puente “Postmodern immutable data structures”](https://www.youtube.com/watch?v=sPhpelUfu8Q)
-- [CppCon 2018: Juan Pedro Bolivar Puente “The Most Valuable Values”](https://www.youtube.com/watch?v=_oBx_NbLghY)
-- [Value-oriented design in an object-oriented system - Juan Pedro Bolivar Puente](https://www.youtube.com/watch?v=SAMR5GJ_GqA)
+- [CppCon 2018: Juan Pedro Bolivar Puente "The Most Valuable Values”](https://www.youtube.com/watch?v=_oBx_NbLghY)
+- [CppCon 2021: Juan Pedro Bolivar Puente "Value-oriented Design in an Object-oriented System”](https://www.youtube.com/watch?v=67MmJSw4bxo)
 
 You are now up to date!
 
