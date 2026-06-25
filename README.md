@@ -10,11 +10,11 @@ The interface is very simple:
 - `apply(auto fn) -> T` Applys `fn` to the value and returns the new value.
 - `apply_r(auto fn) -> decltype(auto)` Applys `fn` to the value and returns some other value.
 
-This entire API is *lock-free*.
+## Notes
 
-`get()` is also realtime-safe.
-
-`apply()` and `apply_r()` are not realtime-safe as they will allocate and deallocate memory.
+- This entire API is **lock-free**.
+- `get()` is also **realtime-safe**.
+- `apply()` and `apply_r()` are not realtime-safe as they will allocate and deallocate memory.
 
 ## What does `apply()` do under the hood?
 
