@@ -47,8 +47,8 @@ template <typename T>
 struct slot {
 	slot() = default;
 	~slot();
+	hazptr::retire_list<T> retire_list;
 	std::atomic<slot*> next                 = nullptr;
-	hazptr::retire_list<T> retire_list      = nullptr;
 	std::atomic<bool> assigned              = false;
 	std::atomic<node<T>*> protected_node    = nullptr;
 	int num_retires_since_gc                = 0;
