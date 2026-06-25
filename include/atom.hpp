@@ -63,9 +63,10 @@ struct hazptrs {
 
 template <typename T>
 struct thread_slot {
+	thread_slot() = delete;
 	thread_slot(hazptr::hazptrs<T>* hazptrs);
 	~thread_slot();
-	auto& get() { return *slot_; }
+	auto get() { return slot_; }
 private:
 	slot<T>* slot_ = nullptr;
 };
@@ -102,6 +103,7 @@ auto create_new_thread_slot_at_tail(hazptr::slot<T>* tail) -> slot<T>* {
 
 template <typename T> [[nodiscard]]
 auto acquire_thread_slot(hazptr::hazptrs<T>* hazptrs) -> slot<T>* {
+	assert (hazptrs);
 	auto curr = hazptrs->slot_list;
 	for (;;) {
 		if (!curr->assigned.load() && !curr->assigned.exchange(true)) {
@@ -121,6 +123,7 @@ auto release_thread_slot(hazptr::slot<T>* slot) -> void {
 
 template <typename T, typename Fn>
 auto for_each_slot(hazptrs<T>* hazptrs, Fn&& fn) -> void {
+	assert (hazptrs);
 	auto curr = hazptrs->slot_list;
 	while (curr) {
 		fn(*curr);
@@ -146,6 +149,7 @@ auto sort_and_remove_duplicates(std::vector<T, Alloc>* x) -> void {
 
 template <typename T>
 auto find_protected_nodes(hazptr::hazptrs<T>* hazptrs, node_list<T>* list) -> void {
+	assert (hazptrs);
 	assert (list->empty());
 	auto add_to_list = [list](const hazptr::node<T>* node) {
 		list->push_back(node);
@@ -178,6 +182,7 @@ auto delete_unprotected_nodes(hazptr::retire_list<T>* retire_list, FnIsProtected
 
 template <typename T>
 auto gc(hazptr::hazptrs<T>* hazptrs, hazptr::slot<T>* slot) -> void {
+	assert (hazptrs);
 	slot->num_retires_since_gc = 0;
 	find_protected_nodes(hazptrs, &slot->protected_node_list_for_gc);
 	auto is_protected = [slot](const hazptr::node<T>* node) {
@@ -189,6 +194,7 @@ auto gc(hazptr::hazptrs<T>* hazptrs, hazptr::slot<T>* slot) -> void {
 
 template <typename T>
 auto retire(hazptr::hazptrs<T>* hazptrs, hazptr::slot<T>* slot, hazptr::node<T>* node, int gc_threshold) -> void {
+	assert (hazptrs);
 	push(&slot->retire_list, node);
 	if (++slot->num_retires_since_gc >= gc_threshold) {
 		gc(hazptrs, slot);
@@ -197,6 +203,7 @@ auto retire(hazptr::hazptrs<T>* hazptrs, hazptr::slot<T>* slot, hazptr::node<T>*
 
 template <typename T>
 auto protect(hazptr::slot<T>* slot, std::atomic<hazptr::node<T>*>& ptr_to_node) -> hazptr::node<T>* {
+	assert (slot);
 	auto node = ptr_to_node.load(std::memory_order_acquire);
 	for (;;) {
 		slot->protected_node.store(node);
@@ -211,13 +218,14 @@ auto protect(hazptr::slot<T>* slot, std::atomic<hazptr::node<T>*>& ptr_to_node) 
 
 template <typename T>
 auto release(hazptr::slot<T>* slot) -> void {
+	assert (slot);
 	slot->protected_node.store(nullptr, std::memory_order_release);
 }
 
 template <typename T>
 auto retire(hazptr::node<T>* node, int gc_threshold) -> void {
-	auto hazptrs = std::addressof(g_hazptrs<T>);
-	auto slot    = std::addressof(g_thread_local_slot<T>.get());
+	const auto hazptrs = std::addressof(g_hazptrs<T>);
+	const auto slot    = g_thread_local_slot<T>.get();
 	assert (hazptrs);
 	assert (slot);
 	retire(hazptrs, slot, node, gc_threshold);
@@ -225,14 +233,14 @@ auto retire(hazptr::node<T>* node, int gc_threshold) -> void {
 
 template <typename T>
 auto protect(std::atomic<hazptr::node<T>*>& ptr_to_node) -> hazptr::node<T>* {
-	auto slot = std::addressof(g_thread_local_slot<T>.get());
+	const auto slot = g_thread_local_slot<T>.get();
 	assert (slot);
 	return protect(slot, ptr_to_node);
 }
 
 template <typename T>
 auto release() -> void {
-	auto slot = std::addressof(g_thread_local_slot<T>.get());
+	const auto slot = g_thread_local_slot<T>.get();
 	assert (slot);
 	release(slot);
 }
