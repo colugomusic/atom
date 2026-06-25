@@ -50,7 +50,7 @@ constexpr auto fn_decrement_counter = [](model x) { x.counter--; return x; };
 constexpr auto fn_increment_counter = [](model x) { x.counter++; return x; };
 auto fn_set_counter(int value) { return [value](model x) { x.counter = value; return x; }; }
 
-// Shows how to apply an action to the model and return a value.
+// Shows how to apply an action to the model and return a different value.
 constexpr auto fn_just_return_42 = [](model x) {
 	// ...could modify the model here...
 	// Then we return a pair holding the new value of the
