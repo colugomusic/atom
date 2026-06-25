@@ -49,7 +49,7 @@ struct slot {
 	~slot();
 	hazptr::retire_list<T> retire_list;
 	std::atomic<slot*> next                 = nullptr;
-	std::atomic<bool> assigned              = false;
+	std::atomic<bool> assigned              = true;
 	std::atomic<node<T>*> protected_node    = nullptr;
 	int num_retires_since_gc                = 0;
 	node_list<T> protected_node_list_for_gc = init_protected_node_list_for_gc<T>();
@@ -67,7 +67,7 @@ struct thread_slot {
 	~thread_slot();
 	auto& get() { return *slot_; }
 private:
-	slot<T>* slot_;
+	slot<T>* slot_ = nullptr;
 };
 
 template <typename T> static inline hazptrs<T> g_hazptrs;
@@ -216,17 +216,25 @@ auto release(hazptr::slot<T>* slot) -> void {
 
 template <typename T>
 auto retire(hazptr::node<T>* node, int gc_threshold) -> void {
-	retire(&g_hazptrs<T>, &g_thread_local_slot<T>.get(), node, gc_threshold);
+	auto hazptrs = std::addressof(g_hazptrs<T>);
+	auto slot    = std::addressof(g_thread_local_slot<T>.get());
+	assert (hazptrs);
+	assert (slot);
+	retire(hazptrs, slot, node, gc_threshold);
 }
 
 template <typename T>
 auto protect(std::atomic<hazptr::node<T>*>& ptr_to_node) -> hazptr::node<T>* {
-	return protect(&g_thread_local_slot<T>.get(), ptr_to_node);
+	auto slot = std::addressof(g_thread_local_slot<T>.get());
+	assert (slot);
+	return protect(slot, ptr_to_node);
 }
 
 template <typename T>
 auto release() -> void {
-	release(&g_thread_local_slot<T>.get());
+	auto slot = std::addressof(g_thread_local_slot<T>.get());
+	assert (slot);
+	release(slot);
 }
 
 [[nodiscard]] auto fn_always(auto value) { return [value](auto&&...) { return value; }; }
