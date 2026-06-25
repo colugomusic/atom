@@ -5,6 +5,7 @@
 #include <cassert>
 #include <ranges>
 #include <thread>
+#include <utility>
 #include <vector>
 
 // Non-intrusive hazard pointers based partly on Daniel Anderson's implementation here:
