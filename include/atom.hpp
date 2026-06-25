@@ -72,7 +72,7 @@ private:
 };
 
 template <typename T> static inline hazptrs<T> g_hazptrs;
-template <typename T> static inline thread_local thread_slot<T> g_thread_local_slot = thread_slot<T>{&g_hazptrs<T>};
+template <typename T> static inline thread_local thread_slot<T> g_thread_local_slot{&g_hazptrs<T>};
 
 template <typename T>
 auto push(hazptr::retire_list<T>* retire_list, hazptr::node<T>* node) -> void {
