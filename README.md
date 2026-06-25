@@ -6,9 +6,24 @@ I intended this to be used in a single-atom architecture where you have a single
 
 The interface is very simple:
 
-- `get() const -> T` Returns the current value.
-- `apply(auto fn) -> T` Applys `fn` to the value and returns the new value.
-- `apply_r(auto fn) -> decltype(auto)` Applys `fn` to the value and returns some other value.
+```c++
+namespace atom {
+template <typename T>
+struct val {
+	val(int gc_threshold = hazptr::DEFAULT_GC_THRESHOLD);
+	~val();
+	[[nodiscard]] auto get() const -> T;
+	auto apply(auto fn) -> T;
+	auto apply_r(auto fn) -> decltype(auto);
+private:
+	...
+};
+} // atom
+```
+
+- `get`: Returns the current value.
+- `apply`: Applys `fn` to the value and returns the new value.
+- `apply_r`: Applys `fn` to the value and returns some other value.
 
 ## Notes
 
