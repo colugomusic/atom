@@ -28,7 +28,7 @@ private:
 - This entire API is **lock-free**.
 - `get()` is also **realtime-safe**.
 - `apply()` and `apply_r()` are not realtime-safe as they will allocate and deallocate memory.
-- I intended this to be used in a single-atom architecture where you have a single value representing the entire state of your system, so it's expected that you will only create a single `atom::val<T>`, but you can create more than one if you need to. There is a little bit of memory overhead required to initialize each one that you create but I have not tested to find any reasonable upper bound. You probably don't want to go creating thousands of them though.
+- I intended this to be used in a single-atom architecture where you have a single value representing the entire state of your system, so it's expected that you will only create a single `atom::val<T>`, but you can create more than one if you need to. There is a little bit of memory overhead required for each unique `T` that you instantiate but I have not tested to find any reasonable upper bound. You probably don't want to go creating thousands of them though.
 
 ## What does `apply()` do under the hood?
 
