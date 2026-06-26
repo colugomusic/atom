@@ -17,7 +17,7 @@
 // Unlike Anderson's implementation we generate a separate list of slots for every type T in atom::val<T>. This
 // allows the implementation to be non-intrusive. This is intended to be used in a single-atom architecture where
 // you would only want to protect one thing anyway (i.e. you probably only want to have one atom::val<T> in your
-// program.) There is a little bit of memory overhead for each unique T that you instantiate.
+// program.) There is a little bit of memory overhead for each val of unique T that you instantiate.
 namespace atom::hazptr {
 
 static constexpr auto DEFAULT_GC_THRESHOLD = 2000;
