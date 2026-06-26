@@ -64,10 +64,7 @@ auto counter_incrementer_thread(std::stop_token stop, atom::val<model_a>* a) -> 
 }
 
 auto counter_setter_thread(std::stop_token stop, atom::val<model_a>* a) -> void {
-	for (;;) {
-		if (stop.stop_requested()) {
-			break;
-		}
+	while (!stop.stop_requested()) {
 		a->apply(fn_set_counter(0));
 	}
 }
