@@ -303,7 +303,7 @@ auto protect(hazptr::slot<T>* slot, std::atomic<hazptr::node<T>*>& ptr_to_node) 
 }
 
 template <typename T>
-auto release(hazptr::slot<T>* slot) -> void {
+auto unprotect(hazptr::slot<T>* slot) -> void {
 	assert (slot);
 	slot->protected_node.store(nullptr, std::memory_order_release);
 }
@@ -319,8 +319,8 @@ auto protect(std::atomic<hazptr::node<T>*>& ptr_to_node) -> hazptr::node<T>* {
 }
 
 template <typename T>
-auto release() -> void {
-	release(tls_slot<T>());
+auto unprotect() -> void {
+	unprotect(tls_slot<T>());
 }
 
 [[nodiscard]] auto fn_always(auto value) { return [value](auto&&...) { return value; }; }
@@ -369,7 +369,7 @@ auto val<T>::apply(auto fn) -> T {
 	for (;;) {
 		auto expected_node = hazptr::protect(node_);
 		auto old_value     = expected_node->value;
-		hazptr::release<T>();
+		hazptr::unprotect<T>();
 		const auto new_value    = fn(std::move(old_value));
 		const auto desired_node = hazptr::acquire_node<T>(new_value);
 		if (node_.compare_exchange_weak(expected_node, desired_node)) {
@@ -385,7 +385,7 @@ auto val<T>::apply_r(auto fn) -> decltype(auto) {
 	for (;;) {
 		auto expected_node = hazptr::protect(node_);
 		auto old_value     = expected_node->value;
-		hazptr::release<T>();
+		hazptr::unprotect<T>();
 		const auto [new_value, result] = fn(std::move(old_value));
 		const auto desired_node        = hazptr::acquire_node<T>(new_value);
 		if (node_.compare_exchange_weak(expected_node, desired_node)) {
@@ -400,7 +400,7 @@ template <typename T>
 auto val<T>::get() const -> T {
 	const auto node  = hazptr::protect(node_);
 	const auto value = node->value;
-	hazptr::release<T>();
+	hazptr::unprotect<T>();
 	return value;
 }
 
