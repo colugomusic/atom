@@ -105,6 +105,28 @@ auto char_incrementer_thread(std::stop_token stop, atom::val<model_b>* b, profil
 	}
 }
 
+auto print(profiling prof) -> void {
+	std::cout << std::format(
+		"\nProfiling results:\n"
+		"print: {}\n"
+		"counter dec: {}\n"
+		"counter inc: {}\n"
+		"counter set: {}\n"
+		"counter ret: {}\n"
+		"char dec: {}\n"
+		"char inc: {}\n"
+		"---------------------\n"
+		"total: {}\n",
+		prof.print_count,
+		prof.counter_dec_count,
+		prof.counter_inc_count,
+		prof.counter_set_count,
+		prof.counter_ret_count,
+		prof.char_dec_count,
+		prof.char_inc_count,
+		prof.print_count + prof.counter_dec_count + prof.counter_inc_count + prof.counter_set_count + prof.counter_ret_count + prof.char_dec_count + prof.char_inc_count);
+}
+
 auto main(int, const char*[]) -> int {
 	auto prof = profiling{};
 	{
@@ -130,24 +152,6 @@ auto main(int, const char*[]) -> int {
 		auto printer        = std::jthread{printer_thread, &a0, &a1, &b0, &b1, &prof};
 		std::this_thread::sleep_for(RUN_DURATION);
 	}
-	std::cout << std::format(
-		"\nProfiling results:\n"
-		"print: {}\n"
-		"counter dec: {}\n"
-		"counter inc: {}\n"
-		"counter set: {}\n"
-		"counter ret: {}\n"
-		"char dec: {}\n"
-		"char inc: {}\n"
-		"---------------------\n"
-		"total: {}\n",
-		prof.print_count,
-		prof.counter_dec_count,
-		prof.counter_inc_count,
-		prof.counter_set_count,
-		prof.counter_ret_count,
-		prof.char_dec_count,
-		prof.char_inc_count,
-		prof.print_count + prof.counter_dec_count + prof.counter_inc_count + prof.counter_set_count + prof.counter_ret_count + prof.char_dec_count + prof.char_inc_count);
+	print(prof);
 	return 0;
 }
