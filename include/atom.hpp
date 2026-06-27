@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <memory>
 #include <ranges>
 #include <thread>
 #include <utility>
