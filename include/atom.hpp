@@ -189,6 +189,7 @@ auto acquire_node(T value) -> node<T>* {
 template <typename T>
 auto release_node(node_list<T>* pool, hazptr::node<T>* node) -> void {
 	assert (pool);
+	node->value = {};
 	pool->push_back(node);
 }
 
