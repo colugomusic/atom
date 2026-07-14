@@ -20,8 +20,8 @@ private:
 ```
 
 - `get`: Returns the current value.
-- `apply`: Applys `fn` to the value and returns the new value.
-- `apply_r`: Applys `fn` to the value and returns some other value.
+- `apply`: Applies `fn` to the value and returns the new value.
+- `apply_r`: Applies `fn` to the value and returns some other value.
 
 ## Notes
 
